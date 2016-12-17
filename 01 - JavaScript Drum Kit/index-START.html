@@ -59,6 +59,41 @@
 
 <script>
 
+window.addEventListener("keydown", function keydownfunction (key) {
+
+const audio = document.querySelector(`audio[data-key="${key.keyCode}"]`);
+
+if (!audio) return;
+audio.currentTime = 0;
+audio.play();
+  
+}, false);
+
+
+/*
+var keyboard = document.getElementsByClassName("key");
+var kbd = document.getElementsByTagName("div");
+var i;
+
+for (i = 0; i < keyboard.length; i++) {
+
+  keyboard[i].addEventListener("keyup", function keyupfunction() {
+
+  keyboard.classList += "playing";
+
+   }, false);
+}
+*/
+
+/*
+var pressedKey = event.which;
+
+if (kbd.classList.contains(event.which)) {
+
+  keyboard.classList += "playing";
+
+}
+*/
 </script>
 
 
