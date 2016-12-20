@@ -59,41 +59,40 @@
 
 <script>
 
-window.addEventListener("keydown", function keydownfunction (key) {
+window.addEventListener("keydown", function keydownfunction (key) { // We're listening every keydown on window.
 
 const audio = document.querySelector(`audio[data-key="${key.keyCode}"]`);
 
-if (!audio) return;
-audio.currentTime = 0;
-audio.play();
+/* 
+
+Only one queryselector because we're looking for one selection.
+I'm looking for every audio element that has the data-key "key.keyCode".
+key.keyCode is the exact code of a key in a keydown event, so extra stuff is removed. It's also dynamic since our argument is connected to it. Pretty nice stuff.
+
+*/
+
+const keyb = document.querySelector(`.key[data-key="${key.keyCode}"]`);
+keyb.classList.add("playing");
+
+if (!audio) return; //Stop function if data-key is not connected to audio element.
+audio.currentTime = 0; //Reset playing time every time a ''matching'' keydown event happens.
+audio.play(); //Play audio every time a matching keydown event happens.
   
 }, false);
 
+function removeTransition (key) {
 
-/*
-var keyboard = document.getElementsByClassName("key");
-var kbd = document.getElementsByTagName("div");
-var i;
+  if (key.propertyName !== 'transform') return; // Discard everything that's not transform property under 'key', which comes from keydown event.
 
-for (i = 0; i < keyboard.length; i++) {
-
-  keyboard[i].addEventListener("keyup", function keyupfunction() {
-
-  keyboard.classList += "playing";
-
-   }, false);
-}
-*/
-
-/*
-var pressedKey = event.which;
-
-if (kbd.classList.contains(event.which)) {
-
-  keyboard.classList += "playing";
+  this.classList.remove('playing'); // In this instance, 'this' is the keyb element that event listener is attached to. I can also find this out by console.logging it.
 
 }
-*/
+
+const keys = document.querySelectorAll(".key"); //Select all elements with ".key" class. This returns an array of elements.
+keys.forEach(keyb => keyb.addEventListener('transitionend', removeTransition));
+
+/* We're going through all of the selected elements within that array and adding them an event listener that ends transition. */
+
 </script>
 
 
