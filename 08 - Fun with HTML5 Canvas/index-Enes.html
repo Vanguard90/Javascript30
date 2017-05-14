@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+const canvas = document.querySelector("canvas"); //Selecting the canvas.
+const ctx = canvas.getContext("2d"); //Defining whether canvas is in 3d or in 2d.
+
+canvas.width = window.innerWidth; //Canvas width is page width.
+canvas.height = window.innerHeight; //Canvas height is page height.
+
+ctx.strokeStyle = "#27342e"; //Color of something when you draw.
+ctx.lineJoin = "round"; //End of the line should be round, not square.
+ctx.lineCap = "round"; //When line breaks to somewhere else, how should it 'break'.
+ctx.lineWidth = 30;
+//There is also global composite operator. I haven't added it here.
+
+let isDrawing = false; //By default, we're not drawing. This is a flag.
+let lastX = 0; //Where do you start the line from, when we end it it will be the end.
+let lastY = 0;
+let hue = 0;
+let direction = true;
+
+function draw (e) {
+	if(!isDrawing) return; //Stop the function from logging change unless we are drawing. We're returning nothing.
+	console.log(e);
+	ctx.strokeStyle = `hsl(${hue},100%,50%`; //Dynamically changing hue, saturation and lighting levels.
+	ctx.beginPath(); //This is the beggining of a new path when this function is running.
+	ctx.moveTo(lastX, lastY); //Start from these positions.
+	ctx.lineTo(e.offsetX, e.offsetY); //Make a line to these positions.
+	ctx.stroke();
+	lastX = e.offsetX;
+	lastY = e.offsetY;
+	hue++;
+	if (hue >= 360) {hue = 0;}
+	if (ctx.lineWidth >= 50 || ctx.lineWidth <= 1) {
+		direction = !direction; //If above conditions are there, flip the line direction. So true becomes false etc.
+	}
+	if (direction) {
+	ctx.lineWidth++;
+	} else if (!direction) {
+		ctx.lineWidth--;
+	}
+	
+}
+
+
+canvas.addEventListener('mousedown', (e) => {
+
+isDrawing = true
+lastX = e.offsetX; //Update the last X and Y before the mouse moves. So start point is not 0. It's where your mouse clicks.
+lastY = e.offsetY;
+
+}); // When mouse is clicked, draw.
+canvas.addEventListener('mousemove', draw); //Add event listener to listen mouse movement.
+canvas.addEventListener('mouseup', () => isDrawing = false); //When we stop clicking the mouse, stop drawing.
+canvas.addEventListener('mouseout', () => isDrawing = false); //When mouse is out of the canvas, also stop drawing. This covers mistakes etc.
+</script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
+
+</body>
+</html>
