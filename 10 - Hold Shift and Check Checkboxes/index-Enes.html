@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+
+    html {
+      font-family: sans-serif;
+      background:#ffc600;
+    }
+
+    .inbox {
+      max-width:400px;
+      margin:50px auto;
+      background:white;
+      border-radius:5px;
+      box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+    }
+
+    .item {
+      display:flex;
+      align-items:center;
+      border-bottom: 1px solid #F1F1F1;
+    }
+
+    .item:last-child {
+      border-bottom:0;
+    }
+
+
+    input:checked + p {
+      background:#F9F9F9;
+      text-decoration: line-through;
+    }
+
+    input[type="checkbox"] {
+      margin:20px;
+    }
+
+    p {
+      margin:0;
+      padding:20px;
+      transition:background 0.2s;
+      flex:1;
+      font-family:'helvetica neue';
+      font-size: 20px;
+      font-weight: 200;
+      border-left: 1px solid #D1E2FF;
+    }
+
+    .details {
+      text-align: center;
+      font-size: 15px;
+    }
+
+
+  </style>
+   <!--
+   The following is a common layout you would see in an email client.
+
+   When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
+
+  -->
+  <div class="inbox">
+    <div class="item">
+      <input type="checkbox">
+      <p>This is an inbox layout.</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check one item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Hold down your Shift key</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check a lower item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Everything inbetween should also be set to checked</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Try do it with out any libraries</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Just regular JavaScript</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Good Luck!</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Don't forget to tweet your result!</p>
+    </div>
+  </div>
+
+<script>
+
+const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+
+let lastChecked;
+
+function handleCheck(e) {
+  // Check if they had the shift key down
+  // AND check that they are checking it
+  let inBetween = false;
+  if (e.shiftKey && this.checked) {
+    // go ahead and do what we please
+    // loop over every single checkbox
+    checkboxes.forEach(checkbox => {
+      console.log(checkbox);
+      if (checkbox === this || checkbox === lastChecked) {
+        inBetween = !inBetween;
+        console.log('STarting to check them inbetween!');
+      }
+
+      if (inBetween) {
+        checkbox.checked = true;
+      }
+    });
+  }
+
+  lastChecked = this;
+}
+
+checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+
+/* My similar solution for past problem 
+let checkboxes = document.querySelectorAll("input[type='checkbox']"); //Returns nodelist for every input that has [type=checkbox]. Better in case more input elements in the page. Also more spesific = better performance.
+
+console.log(checkboxes);
+
+let checkArray = Array.from(checkboxes); //Nodelist now array with much more prototype options.
+
+checkArray.map(box => box.addEventListener("click", refreshed, false)); //Add click event listener to every item of checkArray.
+
+let checkedArray = checkArray.map(item => item.checked); //I want every item in checkArray to return to me with 'checked' value. Checked value is a boolean that determines whether checkbox is checked or not.
+
+let firstItem;
+let lastItem;
+let results;
+
+function refreshed() {
+
+checkboxes = document.querySelectorAll("input[type='checkbox']");
+checkArray = Array.from(checkboxes);
+checkedArray = checkArray.map(item => item.checked);//Redecleration at every click a.k.a state change.
+
+results = []; //Empty starting array
+let bool = true; //Looking for true boolean
+let indx = checkedArray.indexOf(bool);//I want the indexes of bool variable in the Array with `checked` values.
+
+while (indx != -1) {//While there is something in the Array(not -1)
+results.push(indx);//Add indx value to results array.
+indx = checkedArray.indexOf(bool, indx + 1);//Move to next index item and check boolean
+/*So essentially, with above code, I find all true boolean values' indexes in the array and store them at an another array to use.
+}
+
+lastItem = results.pop();//Last value in results array is the highest `placed` boolean. I want that to mark it.
+firstItem = results[0];//Always give first value in results Array.
+checkStatus(lastItem, firstItem);
+}
+
+function checkStatus(lastItem, firstItem) {
+
+if (lastItem != undefined && firstItem != undefined && lastItem - firstItem != 0) {
+	for (let i = firstItem; i <= lastItem; i++) {
+  selection = [];
+  selectionEl = document.querySelectorAll('input[type="checkbox"]')[i];
+  selection.push(selectionEl);
+  selection[0].checked = true;
+  }
+/* At every iteration, there will be a node on selection Array and its value will be 'true'. This loop will run between firstItem and lastItem values. So everything between firstItem and lastItem is always checked 
+}
+}
+*/
+</script>
+</body>
+</html>
